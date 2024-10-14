@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\EntrepotRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EntrepotRepository::class)]
@@ -19,8 +21,19 @@ class Entrepot
     #[ORM\Column]
     private ?int $nbrCasier = null;
 
-    #[ORM\ManyToOne]
-    private ?Ville $laVille = null;
+    /**
+     * @var Collection<int, Distance>
+     */
+    #[ORM\OneToMany(targetEntity: Distance::class, mappedBy: 'leEntrepot')]
+    private Collection $lesDistances;
+
+    #[ORM\Column(length: 25)]
+    private ?string $statut = null;
+
+    public function __construct()
+    {
+        $this->lesDistances = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -51,14 +64,44 @@ class Entrepot
         return $this;
     }
 
-    public function getLaVille(): ?Ville
+    /**
+     * @return Collection<int, Distance>
+     */
+    public function getLesDistances(): Collection
     {
-        return $this->laVille;
+        return $this->lesDistances;
     }
 
-    public function setLaVille(?Ville $laVille): static
+    public function addLesDistance(Distance $lesDistance): static
     {
-        $this->laVille = $laVille;
+        if (!$this->lesDistances->contains($lesDistance)) {
+            $this->lesDistances->add($lesDistance);
+            $lesDistance->setLeEntrepot($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLesDistance(Distance $lesDistance): static
+    {
+        if ($this->lesDistances->removeElement($lesDistance)) {
+            // set the owning side to null (unless already changed)
+            if ($lesDistance->getLeEntrepot() === $this) {
+                $lesDistance->setLeEntrepot(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getStatut(): ?string
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(string $statut): static
+    {
+        $this->statut = $statut;
 
         return $this;
     }

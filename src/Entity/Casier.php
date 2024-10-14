@@ -16,6 +16,9 @@ class Casier
     #[ORM\ManyToOne]
     private ?Entrepot $leEntrepot = null;
 
+    #[ORM\Column(length: 25)]
+    private ?string $statut = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -29,6 +32,18 @@ class Casier
     public function setLeEntrepot(?Entrepot $leEntrepot): static
     {
         $this->leEntrepot = $leEntrepot;
+
+        return $this;
+    }
+
+    public function getStatut(): ?string
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(string $statut): static
+    {
+        $this->statut = $statut;
 
         return $this;
     }

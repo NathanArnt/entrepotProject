@@ -24,6 +24,7 @@ class Ville
     #[ORM\OneToMany(targetEntity: Colis::class, mappedBy: 'laVille')]
     private Collection $lesColis;
 
+
     public function __construct()
     {
         $this->lesColis = new ArrayCollection();
@@ -54,22 +55,22 @@ class Ville
         return $this->lesColis;
     }
 
-    public function addLesColi(Colis $lesColi): static
+    public function addLesColis(Colis $lesColis): static
     {
-        if (!$this->lesColis->contains($lesColi)) {
-            $this->lesColis->add($lesColi);
-            $lesColi->setLaVille($this);
+        if (!$this->lesColis->contains($lesColis)) {
+            $this->lesColis->add($lesColis);
+            $lesColis->setLaVille($this);
         }
 
         return $this;
     }
 
-    public function removeLesColi(Colis $lesColi): static
+    public function removeLesColis(Colis $lesColis): static
     {
-        if ($this->lesColis->removeElement($lesColi)) {
+        if ($this->lesColis->removeElement($lesColis)) {
             // set the owning side to null (unless already changed)
-            if ($lesColi->getLaVille() === $this) {
-                $lesColi->setLaVille(null);
+            if ($lesColis->getLaVille() === $this) {
+                $lesColis->setLaVille(null);
             }
         }
 
