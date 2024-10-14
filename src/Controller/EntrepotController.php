@@ -2,32 +2,32 @@
 
 namespace App\Controller;
 
-use App\Entity\Ville;
-use App\Form\VilleFormType;
+use App\Entity\Entrepot;
+use App\Form\EntrepotFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class VilleController extends AbstractController
+class EntrepotController extends AbstractController
 {
-    #[Route('/ville', name: 'app_ville')]
+    #[Route('/entrepot', name: 'app_entrepot')]
     public function index(): Response
     {
-        return $this->render('ville/index.html.twig', [
-            'controller_name' => 'VilleController',
+        return $this->render('entrepot/index.html.twig', [
+            'controller_name' => 'EntrepotController',
         ]);
     }
 
-    #[Route('/ajouterville', name: 'app_ajouter_ville')]
-    public function definirDistance(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/ajouterentrepot', name: 'app_ajouter_entrepot')]
+    public function ajouterEntrepot(Request $request, EntityManagerInterface $entityManager): Response
     {
         // Création d'une nouvelle instance de l'entité Produit
-        $ville = new Ville();
+        $entrepot = new Entrepot();
     
         // Création du formulaire en associant l'entité Produit
-        $form = $this->createForm(VilleFormType::class, $ville);
+        $form = $this->createForm(EntrepotFormType::class, $entrepot);
 
         // Traitement de la requête HTTP
         $form->handleRequest($request);
@@ -36,15 +36,15 @@ class VilleController extends AbstractController
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
                 // Sauvegarde du produit
-                $ville = $form->getData();
-                $entityManager->persist($ville);
+                $entrepot = $form->getData();
+                $entityManager->persist($entrepot);
                 $entityManager->flush();
     
                 // Message de succès
-                $this->addFlash('success', 'La ville a été ajouté avec succès.');
+                $this->addFlash('success', "L'entrepot a été ajouté avec succès.");
     
                 // Redirection
-                return $this->redirectToRoute('app_ajouter_ville');
+                return $this->redirectToRoute('app_ajouter_entrepot');
             } else {
                 // Message flash si le formulaire est soumis mais invalide
                 $this->addFlash('error', 'Le formulaire contient des erreurs. Veuillez les corriger.');
@@ -53,8 +53,8 @@ class VilleController extends AbstractController
     
 
         // Affichage du formulaire dans la vue Twig
-        return $this->render('ville/ajouterville.html.twig', [
-            'villeForm' => $form->createView(),
+        return $this->render('entrepot/ajouterentrepot.html.twig', [
+            'entrepotForm' => $form->createView(),
         ]);
     }
 }
