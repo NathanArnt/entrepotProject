@@ -28,11 +28,12 @@ class Entrepot
     private Collection $lesDistances;
 
     #[ORM\Column(length: 25)]
-    private ?string $statut = null;
+    private ?string $statut;
 
     public function __construct()
     {
         $this->lesDistances = new ArrayCollection();
+        $this->statut = 'incomplet';
     }
 
     public function getId(): ?int

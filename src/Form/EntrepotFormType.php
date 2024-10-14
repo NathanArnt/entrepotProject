@@ -14,7 +14,6 @@ class EntrepotFormType extends AbstractType
         $builder
             ->add('nom')
             ->add('nbrCasier')
-            ->add('statut')
         ;
     }
 

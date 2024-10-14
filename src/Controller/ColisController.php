@@ -51,7 +51,6 @@ class ColisController extends AbstractController
             }
         }
     
-
         // Affichage du formulaire dans la vue Twig
         return $this->render('colis/ajoutercolis.html.twig', [
             'colisForm' => $form->createView(),

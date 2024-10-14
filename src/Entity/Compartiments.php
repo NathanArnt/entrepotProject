@@ -14,10 +14,15 @@ class Compartiments
     private ?int $id = null;
 
     #[ORM\Column(length: 25)]
-    private ?string $statut = null;
+    private ?string $statut;
 
     #[ORM\ManyToOne]
     private ?Casier $leCasier = null;
+
+    public function __construct()
+    {
+        $this->statut = 'incomplet';
+    }
 
     public function getId(): ?int
     {

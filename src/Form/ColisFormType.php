@@ -17,13 +17,9 @@ class ColisFormType extends AbstractType
         $builder
             ->add('taille')
             ->add('poids')
-            ->add('leCompartiment', EntityType::class, [
-                'class' => Compartiments::class,
-                'choice_label' => 'id',
-            ])
             ->add('laVille', EntityType::class, [
                 'class' => Ville::class,
-                'choice_label' => 'id',
+                'choice_label' => 'nom',
             ])
         ;
     }
