@@ -19,6 +19,9 @@ class Compartiments
     #[ORM\ManyToOne]
     private ?Casier $leCasier = null;
 
+    #[ORM\Column(length: 50)]
+    private ?string $capacite = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +47,18 @@ class Compartiments
     public function setLeCasier(?Casier $leCasier): static
     {
         $this->leCasier = $leCasier;
+
+        return $this;
+    }
+
+    public function getCapacite(): ?string
+    {
+        return $this->capacite;
+    }
+
+    public function setCapacite(string $capacite): static
+    {
+        $this->capacite = $capacite;
 
         return $this;
     }
