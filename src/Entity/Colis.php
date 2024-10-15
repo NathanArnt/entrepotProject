@@ -13,9 +13,6 @@ class Colis
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?float $poids = null;
-
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?Compartiments $leCompartiment = null;
 
@@ -28,18 +25,6 @@ class Colis
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getPoids(): ?float
-    {
-        return $this->poids;
-    }
-
-    public function setPoids(float $poids): static
-    {
-        $this->poids = $poids;
-
-        return $this;
     }
 
     public function getLeCompartiment(): ?Compartiments

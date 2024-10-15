@@ -32,9 +32,16 @@ class Entrepot
     #[ORM\ManyToOne]
     private ?Statut $leStatut = null;
 
+    /**
+     * @var Collection<int, Casier>
+     */
+    #[ORM\OneToMany(targetEntity: Casier::class, mappedBy: 'leEntrepot')]
+    private Collection $lesCasiers;
+
     public function __construct()
     {
         $this->lesDistances = new ArrayCollection();
+        $this->lesCasiers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -104,6 +111,36 @@ class Entrepot
     public function setLeStatut(?Statut $leStatut): static
     {
         $this->leStatut = $leStatut;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Casier>
+     */
+    public function getLesCasiers(): Collection
+    {
+        return $this->lesCasiers;
+    }
+
+    public function addLesCasier(Casier $lesCasier): static
+    {
+        if (!$this->lesCasiers->contains($lesCasier)) {
+            $this->lesCasiers->add($lesCasier);
+            $lesCasier->setLeEntrepot($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLesCasier(Casier $lesCasier): static
+    {
+        if ($this->lesCasiers->removeElement($lesCasier)) {
+            // set the owning side to null (unless already changed)
+            if ($lesCasier->getLeEntrepot() === $this) {
+                $lesCasier->setLeEntrepot(null);
+            }
+        }
 
         return $this;
     }

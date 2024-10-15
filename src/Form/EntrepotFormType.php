@@ -18,7 +18,7 @@ class EntrepotFormType extends AbstractType
             ->add('nbrCasier')
             ->add('leStatut', EntityType::class, [
                 'class' => Statut::class,
-                'choice_label' => 'id',
+                'choice_label' => 'libelle',
             ])
         ;
     }

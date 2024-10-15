@@ -14,26 +14,14 @@ class Casier
     private ?int $id = null;
 
     #[ORM\ManyToOne]
-    private ?Entrepot $leEntrepot = null;
-
-    #[ORM\ManyToOne]
     private ?Statut $leStatut = null;
+
+    #[ORM\ManyToOne(inversedBy: 'lesCasiers')]
+    private ?Entrepot $leEntrepot = null;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getLeEntrepot(): ?Entrepot
-    {
-        return $this->leEntrepot;
-    }
-
-    public function setLeEntrepot(?Entrepot $leEntrepot): static
-    {
-        $this->leEntrepot = $leEntrepot;
-
-        return $this;
     }
 
     public function getLeStatut(): ?Statut
@@ -44,6 +32,18 @@ class Casier
     public function setLeStatut(?Statut $leStatut): static
     {
         $this->leStatut = $leStatut;
+
+        return $this;
+    }
+
+    public function getLeEntrepot(): ?Entrepot
+    {
+        return $this->leEntrepot;
+    }
+
+    public function setLeEntrepot(?Entrepot $leEntrepot): static
+    {
+        $this->leEntrepot = $leEntrepot;
 
         return $this;
     }
