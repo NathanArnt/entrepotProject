@@ -34,13 +34,13 @@
             {# Affichage du formulaire avec les erreurs spécifiques à chaque champ #}
             <div class='Form'>
                 {{ form_start(colisForm) }}
-
-                <div class='rowForm'>
-                    {{ form_row(colisForm.taille) }}
-                </div>
                 
                 <div class='rowForm'>
                     {{ form_row(colisForm.poids) }}
+                </div>
+
+                <div class='rowForm'>
+                    {{ form_row(colisForm.laTaille) }}
                 </div>
 
                 <div class='rowForm'>
