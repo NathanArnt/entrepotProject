@@ -44,7 +44,7 @@ class DistanceController extends AbstractController
                 $this->addFlash('success', 'La distance a été ajouté avec succès.');
     
                 // Redirection
-                return $this->redirectToRoute('app_definir_distance');
+                return $this->redirectToRoute('app_ajouter_distance');
             } else {
                 // Message flash si le formulaire est soumis mais invalide
                 $this->addFlash('error', 'Le formulaire contient des erreurs. Veuillez les corriger.');

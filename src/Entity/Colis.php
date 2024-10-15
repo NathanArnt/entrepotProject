@@ -13,9 +13,6 @@ class Colis
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $taille = null;
-
     #[ORM\Column]
     private ?float $poids = null;
 
@@ -25,21 +22,12 @@ class Colis
     #[ORM\ManyToOne(inversedBy: 'lesColis')]
     private ?Ville $laVille = null;
 
+    #[ORM\ManyToOne]
+    private ?Taille $laTaille = null;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getTaille(): ?string
-    {
-        return $this->taille;
-    }
-
-    public function setTaille(string $taille): static
-    {
-        $this->taille = $taille;
-
-        return $this;
     }
 
     public function getPoids(): ?float
@@ -74,6 +62,18 @@ class Colis
     public function setLaVille(?Ville $laVille): static
     {
         $this->laVille = $laVille;
+
+        return $this;
+    }
+
+    public function getLaTaille(): ?Taille
+    {
+        return $this->laTaille;
+    }
+
+    public function setLaTaille(?Taille $laTaille): static
+    {
+        $this->laTaille = $laTaille;
 
         return $this;
     }

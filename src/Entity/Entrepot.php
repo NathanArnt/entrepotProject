@@ -27,13 +27,13 @@ class Entrepot
     #[ORM\OneToMany(targetEntity: Distance::class, mappedBy: 'leEntrepot')]
     private Collection $lesDistances;
 
-    #[ORM\Column(length: 25)]
-    private ?string $statut;
+
+    #[ORM\ManyToOne]
+    private ?Statut $leStatut = null;
 
     public function __construct()
     {
         $this->lesDistances = new ArrayCollection();
-        $this->statut = 'incomplet';
     }
 
     public function getId(): ?int
@@ -95,14 +95,14 @@ class Entrepot
         return $this;
     }
 
-    public function getStatut(): ?string
+    public function getLeStatut(): ?Statut
     {
-        return $this->statut;
+        return $this->leStatut;
     }
 
-    public function setStatut(string $statut): static
+    public function setLeStatut(?Statut $leStatut): static
     {
-        $this->statut = $statut;
+        $this->leStatut = $leStatut;
 
         return $this;
     }

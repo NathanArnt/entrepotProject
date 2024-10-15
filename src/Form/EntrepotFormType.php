@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Entrepot;
+use App\Entity\Statut;
+use Doctrine\ORM\Mapping\Entity;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -14,6 +16,10 @@ class EntrepotFormType extends AbstractType
         $builder
             ->add('nom')
             ->add('nbrCasier')
+            ->add('leStatut', Entity::class, [
+                'class' => Statut::class,
+                'choice_label' => 'libelle',
+            ])
         ;
     }
 

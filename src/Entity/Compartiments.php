@@ -13,32 +13,15 @@ class Compartiments
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 25)]
-    private ?string $statut;
-
     #[ORM\ManyToOne]
     private ?Casier $leCasier = null;
 
-    public function __construct()
-    {
-        $this->statut = 'incomplet';
-    }
+    #[ORM\ManyToOne]
+    private ?Statut $leStatut = null;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getStatut(): ?string
-    {
-        return $this->statut;
-    }
-
-    public function setStatut(string $statut): static
-    {
-        $this->statut = $statut;
-
-        return $this;
     }
 
     public function getLeCasier(): ?Casier
@@ -49,6 +32,18 @@ class Compartiments
     public function setLeCasier(?Casier $leCasier): static
     {
         $this->leCasier = $leCasier;
+
+        return $this;
+    }
+
+    public function getLeStatut(): ?Statut
+    {
+        return $this->leStatut;
+    }
+
+    public function setLeStatut(?Statut $leStatut): static
+    {
+        $this->leStatut = $leStatut;
 
         return $this;
     }

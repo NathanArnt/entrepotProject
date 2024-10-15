@@ -16,13 +16,8 @@ class Casier
     #[ORM\ManyToOne]
     private ?Entrepot $leEntrepot = null;
 
-    #[ORM\Column(length: 25)]
-    private ?string $statut;
-
-    public function __construct()
-    {
-        $this->statut = 'incomplet';
-    }
+    #[ORM\ManyToOne]
+    private ?Statut $leStatut = null;
 
     public function getId(): ?int
     {
@@ -41,14 +36,14 @@ class Casier
         return $this;
     }
 
-    public function getStatut(): ?string
+    public function getLeStatut(): ?Statut
     {
-        return $this->statut;
+        return $this->leStatut;
     }
 
-    public function setStatut(string $statut): static
+    public function setLeStatut(?Statut $leStatut): static
     {
-        $this->statut = $statut;
+        $this->leStatut = $leStatut;
 
         return $this;
     }
