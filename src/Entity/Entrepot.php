@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Form\FormTypeInterface;
 use App\Repository\EntrepotRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;

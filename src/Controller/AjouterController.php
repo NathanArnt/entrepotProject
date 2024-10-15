@@ -15,6 +15,7 @@ use App\Form\StatutFormType;
 use App\Form\TailleFormType;
 use App\Form\VilleFormType;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -126,7 +127,7 @@ class AjouterController extends AbstractController
                 $entityManager->flush();
     
                 // Message de succès
-                $this->addFlash('success', "L'entrepot a été ajouté avec succès.");
+                $this->addFlash('success', "Entrepot a été ajouté avec succès.");
     
                 // Redirection
                 return $this->redirectToRoute('app_ajouter_entrepot');
@@ -136,7 +137,6 @@ class AjouterController extends AbstractController
             }
         }
     
-
         // Affichage du formulaire dans la vue Twig
         return $this->render('ajouter/ajouterentrepot.html.twig', [
             'entrepotForm' => $form->createView(),

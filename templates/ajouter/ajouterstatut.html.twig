@@ -33,7 +33,7 @@
 
             {# Affichage du formulaire avec les erreurs spécifiques à chaque champ #}
             <div class='Form'>
-                {{ form_start(colisForm) }}
+                {{ form_start(statutForm) }}
                 
                 <div class='rowForm'>
                     {{ form_row(statutForm.libelle) }}
@@ -41,7 +41,7 @@
 
                 <button type="submit" class="btn btn-success w-100 mb-5">Ajouter</button>
 
-                {{ form_end(colisForm) }}
+                {{ form_end(statutForm) }}
             </div>
         </div>
         {% endblock %}
