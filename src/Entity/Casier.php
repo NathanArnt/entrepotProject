@@ -17,7 +17,12 @@ class Casier
     private ?Entrepot $leEntrepot = null;
 
     #[ORM\Column(length: 25)]
-    private ?string $statut = null;
+    private ?string $statut;
+
+    public function __construct()
+    {
+        $this->statut = 'incomplet';
+    }
 
     public function getId(): ?int
     {
