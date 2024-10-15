@@ -14,26 +14,14 @@ class Compartiments
     private ?int $id = null;
 
     #[ORM\ManyToOne]
-    private ?Casier $leCasier = null;
-
-    #[ORM\ManyToOne]
     private ?Statut $leStatut = null;
+
+    #[ORM\ManyToOne(inversedBy: 'lesCompartiments')]
+    private ?Casier $leCasier = null;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getLeCasier(): ?Casier
-    {
-        return $this->leCasier;
-    }
-
-    public function setLeCasier(?Casier $leCasier): static
-    {
-        $this->leCasier = $leCasier;
-
-        return $this;
     }
 
     public function getLeStatut(): ?Statut
@@ -44,6 +32,18 @@ class Compartiments
     public function setLeStatut(?Statut $leStatut): static
     {
         $this->leStatut = $leStatut;
+
+        return $this;
+    }
+
+    public function getLeCasier(): ?Casier
+    {
+        return $this->leCasier;
+    }
+
+    public function setLeCasier(?Casier $leCasier): static
+    {
+        $this->leCasier = $leCasier;
 
         return $this;
     }

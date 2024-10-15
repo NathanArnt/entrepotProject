@@ -13,6 +13,7 @@ class TailleFormType extends AbstractType
     {
         $builder
             ->add('libelle')
+            ->add('nbCompartiments')
         ;
     }
 

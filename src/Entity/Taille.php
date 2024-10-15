@@ -16,6 +16,9 @@ class Taille
     #[ORM\Column(length: 50)]
     private ?string $libelle = null;
 
+    #[ORM\Column]
+    private ?int $nbCompartiments = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -29,6 +32,18 @@ class Taille
     public function setLibelle(string $libelle): static
     {
         $this->libelle = $libelle;
+
+        return $this;
+    }
+
+    public function getNbCompartiments(): ?int
+    {
+        return $this->nbCompartiments;
+    }
+
+    public function setNbCompartiments(int $nbCompartiments): static
+    {
+        $this->nbCompartiments = $nbCompartiments;
 
         return $this;
     }

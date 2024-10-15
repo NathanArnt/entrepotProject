@@ -144,4 +144,12 @@ class Entrepot
 
         return $this;
     }
+    public function creerCasier() 
+    {
+        for ($i = 0; $i < 50; $i++) {
+            $leCasier = new Casier();
+            $this->lesCasiers->add($leCasier);
+        }
+    }
+    
 }
