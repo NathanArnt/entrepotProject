@@ -5,11 +5,13 @@ namespace App\Controller;
 use App\Entity\Colis;
 use App\Entity\Distance;
 use App\Entity\Entrepot;
+use App\Entity\Statut;
 use App\Entity\Taille;
 use App\Entity\Ville;
 use App\Form\ColisFormType;
 use App\Form\DistanceFormType;
 use App\Form\EntrepotFormType;
+use App\Form\StatutFormType;
 use App\Form\TailleFormType;
 use App\Form\VilleFormType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -214,6 +216,44 @@ class AjouterController extends AbstractController
         // Affichage du formulaire dans la vue Twig
         return $this->render('ajouter/ajoutertaille.html.twig', [
             'tailleForm' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/ajouter/statut', name: 'app_ajouter_statut')]
+    public function ajouterStatut(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        // Création d'une nouvelle instance de l'entité Produit
+        $statut = new Statut();
+    
+        // Création du formulaire en associant l'entité Produit
+        $form = $this->createForm(StatutFormType::class, $statut);
+
+        // Traitement de la requête HTTP
+        $form->handleRequest($request);
+
+        // Vérification si le formulaire a été soumis et si les données sont valides
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                // Sauvegarde du produit
+                $statut = $form->getData();
+                $entityManager->persist($statut);
+                $entityManager->flush();
+    
+                // Message de succès
+                $this->addFlash('success', 'Le statut a été ajouté avec succès.');
+    
+                // Redirection
+                return $this->redirectToRoute('app_ajouter_statut');
+            } else {
+                // Message flash si le formulaire est soumis mais invalide
+                $this->addFlash('error', 'Le formulaire contient des erreurs. Veuillez les corriger.');
+            }
+        }
+    
+
+        // Affichage du formulaire dans la vue Twig
+        return $this->render('ajouter/ajouterstatut.html.twig', [
+            'statutForm' => $form->createView(),
         ]);
     }
 }
