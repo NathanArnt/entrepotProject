@@ -5,10 +5,12 @@ namespace App\Controller;
 use App\Entity\Colis;
 use App\Entity\Distance;
 use App\Entity\Entrepot;
+use App\Entity\Taille;
 use App\Entity\Ville;
 use App\Form\ColisFormType;
 use App\Form\DistanceFormType;
 use App\Form\EntrepotFormType;
+use App\Form\TailleFormType;
 use App\Form\VilleFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -140,7 +142,7 @@ class AjouterController extends AbstractController
     }
 
     #[Route('/ajouter/ville', name: 'app_ajouter_ville')]
-    public function definirDistance(Request $request, EntityManagerInterface $entityManager): Response
+    public function ajouterVille(Request $request, EntityManagerInterface $entityManager): Response
     {
         // Création d'une nouvelle instance de l'entité Produit
         $ville = new Ville();
@@ -174,6 +176,44 @@ class AjouterController extends AbstractController
         // Affichage du formulaire dans la vue Twig
         return $this->render('ajouter/ajouterville.html.twig', [
             'villeForm' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/ajouter/taille', name: 'app_ajouter_taille')]
+    public function ajouterTaille(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        // Création d'une nouvelle instance de l'entité Produit
+        $taille = new Taille();
+    
+        // Création du formulaire en associant l'entité Produit
+        $form = $this->createForm(TailleFormType::class, $taille);
+
+        // Traitement de la requête HTTP
+        $form->handleRequest($request);
+
+        // Vérification si le formulaire a été soumis et si les données sont valides
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                // Sauvegarde du produit
+                $taille = $form->getData();
+                $entityManager->persist($taille);
+                $entityManager->flush();
+    
+                // Message de succès
+                $this->addFlash('success', 'La taille a été ajouté avec succès.');
+    
+                // Redirection
+                return $this->redirectToRoute('app_ajouter_taille');
+            } else {
+                // Message flash si le formulaire est soumis mais invalide
+                $this->addFlash('error', 'Le formulaire contient des erreurs. Veuillez les corriger.');
+            }
+        }
+    
+
+        // Affichage du formulaire dans la vue Twig
+        return $this->render('ajouter/ajoutertaille.html.twig', [
+            'tailleForm' => $form->createView(),
         ]);
     }
 }
