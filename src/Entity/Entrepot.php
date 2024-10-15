@@ -42,6 +42,7 @@ class Entrepot
     {
         $this->lesDistances = new ArrayCollection();
         $this->lesCasiers = new ArrayCollection();
+        $this->creerCasier();
     }
 
     public function getId(): ?int
