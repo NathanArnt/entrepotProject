@@ -6,6 +6,7 @@ use App\Entity\Entrepot;
 use App\Entity\Statut;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -15,7 +16,9 @@ class EntrepotFormType extends AbstractType
     {
         $builder
             ->add('nom')
-            ->add('nbrCasier')
+            ->add('nbrCasier', IntegerType::class, [
+                'label' => 'Nombre de casier',
+            ])
             ->add('leStatut', EntityType::class, [
                 'class' => Statut::class,
                 'choice_label' => 'libelle',

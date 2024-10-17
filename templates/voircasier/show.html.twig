@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Entrepôt - {{ entrepot.nom }}</title>
+
+    {# Intégration du CSS Bootstrap via CDN #}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+    {# Navigation basique de Bootstrap #}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Gestion des Entrepôts</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Entrepôts</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col">
+                <h1 class="display-4">Entrepôt : {{ entrepot.nom }}</h1>
+                <p class="lead">Nombre de casiers : <strong>{{ entrepot.nbrCasier }}</strong></p>
+                <hr>
+            </div>
+        </div>
+
+        <div class="row">
+            {% for casier in casiers %}
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-header">
+                            <h5 class="card-title">Casier ID: {{ casier.id }}</h5>
+                            <p class="card-text">Statut: 
+                                <span class="badge {{ casier.leStatut ? 'bg-success' : 'bg-secondary' }}">
+                                    {{ casier.leStatut ? casier.leStatut.nom : 'Non défini' }}
+                                </span>
+                            </p>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">Compartiments</h6>
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-sm text-center">
+                                    <tbody>
+                                        {% set compartiments = casier.getLesCompartiments() %}
+                                        {% for i in 0..compartiments|length // 3 - 1 %}
+                                            <tr>
+                                                {% for j in 0..2 %}
+                                                    {% set index = i * 3 + j %}
+                                                    {% if index < compartiments|length %}
+                                                        <td>
+                                                            Compartiment ID: {{ compartiments[index].id }}
+                                                        </td>
+                                                    {% else %}
+                                                        <td></td> {# Case vide si pas de compartiment #}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-12">
+                    <div class="alert alert-warning" role="alert">
+                        Aucun casier trouvé pour cet entrepôt.
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    {# Intégration du JavaScript de Bootstrap via CDN #}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

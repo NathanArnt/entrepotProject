@@ -6,6 +6,7 @@ use Symfony\Component\Form\FormTypeInterface;
 use App\Repository\EntrepotRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EntrepotRepository::class)]
@@ -35,7 +36,7 @@ class Entrepot
     /**
      * @var Collection<int, Casier>
      */
-    #[ORM\OneToMany(targetEntity: Casier::class, mappedBy: 'leEntrepot')]
+    #[ORM\OneToMany(targetEntity: Casier::class, mappedBy: 'leEntrepot', cascade: ['persist'])]
     private Collection $lesCasiers;
 
     public function __construct()
@@ -145,11 +146,13 @@ class Entrepot
 
         return $this;
     }
-    public function creerCasier() 
+    public function creerCasier(): void
     {
-        for ($i = 0; $i < 50; $i++) {
+        // Boucle pour créer les casiers
+        for ($i = 0; $i < 8; $i++) {
             $leCasier = new Casier();
-            $this->lesCasiers->add($leCasier);
+            $leCasier->setLeEntrepot($this);  // Associer chaque casier à cet entrepôt
+            $this->lesCasiers->add($leCasier);  // Ajouter le casier à la collection des casiers
         }
     }
     

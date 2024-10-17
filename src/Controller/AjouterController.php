@@ -108,7 +108,7 @@ class AjouterController extends AbstractController
 
     #[Route('/ajouter/entrepot', name: 'app_ajouter_entrepot')]
     public function ajouterEntrepot(Request $request, EntityManagerInterface $entityManager): Response
-    {
+    {   
         // Création d'une nouvelle instance de l'entité Produit
         $entrepot = new Entrepot();
     
@@ -125,7 +125,7 @@ class AjouterController extends AbstractController
                 $entrepot = $form->getData();
                 $entityManager->persist($entrepot);
                 $entityManager->flush();
-    
+                
                 // Message de succès
                 $this->addFlash('success', "Entrepot a été ajouté avec succès.");
     

@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\CasierRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CasierRepository::class)]
@@ -24,12 +25,13 @@ class Casier
     /**
      * @var Collection<int, Compartiments>
      */
-    #[ORM\OneToMany(targetEntity: Compartiments::class, mappedBy: 'leCasier')]
+    #[ORM\OneToMany(targetEntity: Compartiments::class, mappedBy: 'leCasier', cascade: ['persist'])]
     private Collection $lesCompartiments;
 
     public function __construct()
     {
         $this->lesCompartiments = new ArrayCollection();
+        $this->setLesCompartimentsParCasier();
     }
 
     public function getId(): ?int
@@ -90,20 +92,23 @@ class Casier
         return $this;
     }
 
-    public function setLesCompartimentsParCasier(Casier $leCasier) : array
+    public function setLesCompartimentsParCasier() : array
     {
-        $tabCasier= [];
-        foreach ($this->getLesCompartiments() as $compartiments) 
-        {
-            for ($i = 0; $i < 3; $i++) {
-                $ligne = [];
-                for ($j = 0; $j < 3; $j++) {
-                    $compartiments = new Compartiments();
-                    $ligne[] = $compartiments;  // Ajouter un compartiment dans la ligne
-                }
-                $tabCasier = $ligne;  // Ajouter la ligne dans le casier
+        $tabCasier = [];  // Tableau pour stocker les lignes de compartiments
+
+        // Boucle pour créer 9 compartiments (3 lignes de 3 compartiments chacun)
+        for ($i = 0; $i < 3; $i++) {
+            $ligne = [];  // Ligne de compartiments
+            for ($j = 0; $j < 3; $j++) {
+                $compartiment = new Compartiments();  // Créer un nouveau compartiment
+                $compartiment->setLeCasier($this);  // Associer le compartiment au casier
+                $this->lesCompartiments->add($compartiment);  // Ajouter à la collection de l'entité Casier
+                $ligne[] = $compartiment;  // Ajouter le compartiment à la ligne
             }
+        $tabCasier[] = $ligne;  // Ajouter la ligne de compartiments dans le tableau final
         }
-        return $tabCasier;
-    }
+
+    return $tabCasier;  // Retourner le tableau des compartiments en grille 3x3
 }
+}
+
