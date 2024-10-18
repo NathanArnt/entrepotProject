@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\CasierRepository;
+use App\Repository\StatutRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -108,7 +109,46 @@ class Casier
         $tabCasier[] = $ligne;  // Ajouter la ligne de compartiments dans le tableau final
         }
 
-    return $tabCasier;  // Retourner le tableau des compartiments en grille 3x3
-}
+        return $tabCasier;  // Retourner le tableau des compartiments en grille 3x3
+    }
+
+    public function peutAjouterColis(Colis $colis,StatutRepository $statutRepository): bool
+    {
+    // Récupérer le nombre de compartiments requis pour le colis
+    $nombreCompartimentsRequis = $colis->getNombreCompartimentsRequis();
+    
+    // Diviser les compartiments en lignes (3 lignes de 3 compartiments)
+    $compartimentsParLigne = array_chunk($this->lesCompartiments->toArray(), 3);
+
+    // Parcourir les lignes du casier
+    foreach ($compartimentsParLigne as $ligne) {
+        $compartimentsLibresSurLigne = [];
+
+        // Vérifier si chaque compartiment de la ligne est vide
+        foreach ($ligne as $compartiment) {
+            if ($compartiment->getLeColis() === null) {  // Vérifie si le compartiment est libre
+                $compartimentsLibresSurLigne[] = $compartiment;
+            }
+
+            // Si on trouve suffisamment de compartiments vides dans la ligne actuelle
+            if (count($compartimentsLibresSurLigne) === $nombreCompartimentsRequis) {
+                // Associer les compartiments au colis
+                foreach ($compartimentsLibresSurLigne as $compartimentLibre) {
+                    $compartimentLibre->setLeColis($colis);
+                    $compartimentLibre->setLeStatut('rempli');  // Mettre à jour le statut à "occupé"
+                }
+                return true;  // Colis ajouté avec succès
+            }
+        }
+    }
+
+    // Si aucune ligne n'a pu accueillir le colis, on marque le casier comme rempli
+    $statutRempli = $statutRepository->findOneBy(['libelle' => 'rempli']);
+    if ($statutRempli) {
+        $this->setLeStatut($statutRempli);
+    }
+    
+    return false;  // Casier plein, le colis ne peut pas être ajouté
+    }
 }
 

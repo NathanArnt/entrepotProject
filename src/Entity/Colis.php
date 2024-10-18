@@ -90,4 +90,8 @@ class Colis
 
         return $this;
     }
+    public function getNombreCompartimentsRequis(): int
+    {
+        return $this->laTaille->getNbCompartiments(); // On suppose que l'attribut s'appelle `nombreCompartiments`
+    }
 }

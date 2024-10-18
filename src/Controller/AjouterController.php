@@ -14,6 +14,8 @@ use App\Form\EntrepotFormType;
 use App\Form\StatutFormType;
 use App\Form\TailleFormType;
 use App\Form\VilleFormType;
+use App\Repository\CasierRepository;
+use App\Repository\StatutRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -32,41 +34,91 @@ class AjouterController extends AbstractController
     }
 
     #[Route('/ajouter/colis', name: 'app_ajouter_colis')]
-    public function ajoutercolis(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        // Création d'une nouvelle instance de l'entité Produit
-        $colis = new Colis();
-    
-        // Création du formulaire en associant l'entité Produit
-        $form = $this->createForm(ColisFormType::class, $colis);
+public function ajoutercolis(
+    Request $request, 
+    EntityManagerInterface $entityManager
+): Response {
+    // Création d'une nouvelle instance de l'entité Colis
+    $colis = new Colis();
 
-        // Traitement de la requête HTTP
-        $form->handleRequest($request);
+    // Création du formulaire en associant l'entité Colis
+    $form = $this->createForm(ColisFormType::class, $colis);
 
-        // Vérification si le formulaire a été soumis et si les données sont valides
-        if ($form->isSubmitted()) {
-            if ($form->isValid()) {
-                // Sauvegarde du produit
-                $colis = $form->getData();
-                $entityManager->persist($colis);
-                $entityManager->flush();
-    
-                // Message de succès
-                $this->addFlash('success', 'Le colis a été ajouté avec succès.');
-    
-                // Redirection
-                return $this->redirectToRoute('app_ajouter_colis');
-            } else {
-                // Message flash si le formulaire est soumis mais invalide
-                $this->addFlash('error', 'Le formulaire contient des erreurs. Veuillez les corriger.');
+    // Traitement de la requête HTTP
+    $form->handleRequest($request);
+
+    // Vérification si le formulaire a été soumis et si les données sont valides
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Récupérer les données du formulaire
+        $colis = $form->getData();
+
+        // Récupérer la ville associée au colis
+        $ville = $colis->getLaVille();
+
+        // Récupérer toutes les distances de la ville vers chaque entrepôt
+        $distances = $entityManager->getRepository(Distance::class)->findBy(['laVille' => $ville]);
+
+        // Trouver l'entrepôt le plus proche
+        $entrepotProche = null;
+        $distanceMinimale = PHP_FLOAT_MAX;
+
+        foreach ($distances as $distance) {
+            $entrepot = $distance->getLeEntrepot(); // Récupérer l'entrepôt associé
+            $kilometres = $distance->getKilometres(); // Récupérer la distance
+
+            // Vérifier si cette distance est la plus courte
+            if ($kilometres < $distanceMinimale) {
+                $distanceMinimale = $kilometres;
+                $entrepotProche = $entrepot;
             }
         }
-    
-        // Affichage du formulaire dans la vue Twig
-        return $this->render('ajouter/ajoutercolis.html.twig', [
-            'colisForm' => $form->createView(),
-        ]);
+
+        // Vérifier si un entrepôt a été trouvé
+        if ($entrepotProche) {
+            // Ajouter le colis au premier casier disponible de cet entrepôt
+            if ($entrepotProche->peutAjouterColis($colis)) {
+                $entityManager->persist($colis);
+                $entityManager->flush();
+
+                // Message de succès
+                $this->addFlash('success', 'Le colis a été ajouté avec succès dans l\'entrepôt le plus proche.');
+            } else {
+                // Aucun casier disponible dans l'entrepôt le plus proche
+                $this->addFlash('error', 'Pas de place disponible dans l\'entrepôt le plus proche.');
+            }
+        } else {
+            // Aucun entrepôt trouvé
+            $this->addFlash('error', 'Aucun entrepôt disponible pour cette ville.');
+        }
+
+        // Redirection après soumission
+        return $this->redirectToRoute('app_ajouter_colis');
     }
+
+    // Affichage du formulaire dans la vue Twig
+    return $this->render('ajouter/ajoutercolis.html.twig', [
+        'colisForm' => $form->createView(),
+    ]);
+}
+
+
+// Fonction privée pour récupérer le premier casier libre
+private function getPremierCasierLibre(Entrepot $entrepot, CasierRepository $casierRepository)
+{
+    // Récupérer tous les casiers de l'entrepôt qui ne sont pas encore remplis
+    $casiers = $casierRepository->findBy(['leEntrepot' => $entrepot]);
+
+    // Parcourir les casiers pour trouver le premier casier avec des compartiments libres
+    foreach ($casiers as $casier) {
+        // Vérifier si ce casier peut encore accueillir un colis
+        if ($casier->getLeStatut()->getLibelle() !== 'rempli') {
+            return $casier;
+        }
+    }
+
+    return null; // Aucun casier libre trouvé
+}
+
 
     #[Route('/ajouter/distance', name: 'app_ajouter_distance')]
     public function ajouterDistance(Request $request, EntityManagerInterface $entityManager): Response

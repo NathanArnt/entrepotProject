@@ -22,7 +22,7 @@ class DistanceFormType extends AbstractType
             ])
             ->add('laVille', EntityType::class, [
                 'class' => Ville::class,
-                'choice_label' => 'id',
+                'choice_label' => 'nom',
             ])
         ;
     }

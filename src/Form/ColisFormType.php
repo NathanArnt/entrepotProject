@@ -16,7 +16,6 @@ class ColisFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('poids')
             ->add('laVille', EntityType::class, [
                 'class' => Ville::class,
                 'choice_label' => 'nom',

@@ -62,4 +62,16 @@ class Compartiments
 
         return $this;
     }
+    public function getStatutParCompartiment(): bool
+    {
+        // Vérifier si le statut est défini et si son libellé est 'vide'
+        if ($this->leStatut && $this->leStatut->getLibelle() === 'vide') {
+            return true;
+        }
+        return false;
+    }
+    public function setColisDansCompartiment ()
+    {
+        
+    }
 }

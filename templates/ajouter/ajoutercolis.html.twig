@@ -17,27 +17,18 @@
         <div class="mx-auto" style="width: 400px;">
             <h1 class="text-center h3 mt-5 mb-3 font-weight-normal">Ajoutez un colis</h1>
 
-            {# Affichage des messages de succès #}
-            {% for message in app.flashes('success') %}
-                <div class="alert alert-success">
-                    {{ message }}
-                </div>
-            {% endfor %}
-
-            {# Affichage des messages d'erreur #}
-            {% for message in app.flashes('error') %}
-                <div class="alert alert-danger">
-                    {{ message }}
+            {# Affichage des messages de succès et d'erreur #}
+            {% for type, messages in app.flashes %}
+                <div class="alert alert-{{ type == 'success' ? 'success' : 'danger' }}">
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
                 </div>
             {% endfor %}
 
             {# Affichage du formulaire avec les erreurs spécifiques à chaque champ #}
             <div class='Form'>
                 {{ form_start(colisForm) }}
-                
-                <div class='rowForm'>
-                    {{ form_row(colisForm.poids) }}
-                </div>
 
                 <div class='rowForm'>
                     {{ form_row(colisForm.laTaille) }}
